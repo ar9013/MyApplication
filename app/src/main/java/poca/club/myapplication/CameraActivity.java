@@ -1,8 +1,11 @@
 package poca.club.myapplication;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -26,6 +29,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
+
+import static android.R.attr.targetSdkVersion;
 
 public class CameraActivity extends Activity implements SurfaceHolder.Callback, Camera.PreviewCallback {
 
@@ -38,11 +44,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     SurfaceHolder holder, holderTransparent;
     Camera camera;
 
-
-
     int deviceHeight, deviceWidth;
-    int[] tempFrameData = null;
-    int[] rgbFrameData = null;
+//    int[] tempFrameData = null;
+//    int[] rgbFrameData = null;
 
     public static int getScreenWidth() {
 
@@ -59,6 +63,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG,"onCreate");
+
+
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -78,15 +84,13 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         transparentView.setZOrderMediaOverlay(true);
 
         deviceWidth = getScreenWidth();
-
         deviceHeight = getScreenHeight();
-        tempFrameData = new int[deviceHeight * deviceWidth];
-        rgbFrameData = new int[deviceHeight * deviceWidth];
-
+//        tempFrameData = new int[deviceHeight * deviceWidth];
+//        rgbFrameData = new int[deviceHeight * deviceWidth];
         Log.d(TAG, "deviceHeight :" + deviceHeight);
         Log.d(TAG, "deviceWidth :" + deviceWidth);
 
-        Log.d(TAG,"path : "+this.getFilesDir());
+        //Log.d(TAG,"path : "+this.getFilesDir());
 
     }
 
@@ -154,11 +158,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
             camera = Camera.open(); //open a camera
 
             Camera.Size size = camera.getParameters().getPreviewSize();
-
-
             int width = size.width;
             int height = size.height;
-
             Log.d(TAG,"width :"+width);
             Log.d(TAG,"height :"+height);
 
@@ -166,16 +167,13 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
         } catch (Exception e) {
 
             Log.i("Exception", e.toString());
-
             return;
         }
 
         Camera.Parameters param;
-
         param = camera.getParameters();
 
         Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
-
         if (display.getRotation() == Surface.ROTATION_0) {
             camera.setDisplayOrientation(90);
         }
@@ -183,7 +181,6 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
 
         try {
             camera.setPreviewDisplay(holder);
-
             camera.startPreview();
             isCameraPreview = true;
 
@@ -218,4 +215,9 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback, 
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
 
     }
+
+
+
+
+
 }
